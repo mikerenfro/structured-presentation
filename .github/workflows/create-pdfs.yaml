@@ -15,10 +15,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  make-docx:
+  list_markdown:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: create file list
+        id: files_list
+        run: |
+          echo "files=$(printf '"%s" ' *.markdown)" > $GITHUB_OUTPUT
+    outputs:
+      files: ${{ steps.files_list.outputs.files }}
+
+  make-pdfs:
+    needs: list_markdown
     strategy:
       matrix:
-        file: ${{ steps.files_list.outputs.files }}
+        file: ${{ needs.list_markdown.outputs.files }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
