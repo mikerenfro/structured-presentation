@@ -31,6 +31,7 @@ jobs:
     needs: list-markdown
     if: ${{ always() }}
     strategy:
+      max-parallel: 1
       matrix:
         file: ${{ fromJSON(needs.list-markdown.outputs.files_list) }}
     runs-on: ubuntu-22.04
@@ -51,9 +52,6 @@ jobs:
         uses: docker://pandoc/latex:3.2
         with:
           args: --defaults=settings.yaml --metadata=beameroption="show only notes" -o ${{matrix.file}}-notes.pdf ${{matrix.file}}.markdown
-
-      - name: Checkout again
-        uses: actions/checkout@v4
 
       - name: Upload .pdf
         uses: stefanzweifel/git-auto-commit-action@v5
