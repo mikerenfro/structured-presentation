@@ -23,7 +23,7 @@ jobs:
       - name: create file list
         id: files_list
         run: |
-          echo "files=$(printf '"%s" ' *.markdown)" > $GITHUB_OUTPUT
+          echo "files=$(echo *.markdown)" > $GITHUB_OUTPUT
     outputs:
       files_list: ${{ steps.files_list.outputs.files }}
   make-pdfs:
