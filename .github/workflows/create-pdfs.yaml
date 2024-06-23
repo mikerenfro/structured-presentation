@@ -26,7 +26,6 @@ jobs:
           echo "files=$(printf '"%s" ' *.markdown)" > $GITHUB_OUTPUT
     outputs:
       files: ${{ steps.files_list.outputs.files }}
-
   make-pdfs:
     needs: list_markdown
     if: ${{ always() }}
