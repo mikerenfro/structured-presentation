@@ -23,7 +23,7 @@ jobs:
       - name: create file list
         id: files_list
         run: |
-          echo "files=$(ls *.markdown | jq -R | jq -s -c)" > $GITHUB_OUTPUT
+          echo "files=$(ls *.markdown | sed 's/.markdown//g' | jq -R | jq -s -c)" > $GITHUB_OUTPUT
     outputs:
       files_list: ${{ steps.files_list.outputs.files }}
   make-pdfs:
@@ -39,17 +39,17 @@ jobs:
       - name: Build slides .pdf
         uses: docker://pandoc/latex:3.2
         with:
-          args: --defaults=settings.yaml -o ${{matrix.file}}-slides.pdf ${{matrix.file}}
+          args: --defaults=settings.yaml -o ${{matrix.file}}-slides.pdf ${{matrix.file}}.markdown
 
       - name: Build handouts .pdf
         uses: docker://pandoc/latex:3.2
         with:
-          args: --defaults=settings.yaml -V handout -o ${{matrix.file}}-handouts.pdf ${{matrix.file}}
+          args: --defaults=settings.yaml -V handout -o ${{matrix.file}}-handouts.pdf ${{matrix.file}}.markdown
 
       - name: Build notes .pdf
         uses: docker://pandoc/latex:3.2
         with:
-          args: --defaults=settings.yaml --metadata=beameroption="show only notes" -o ${{matrix.file}}-notes.pdf ${{matrix.file}}
+          args: --defaults=settings.yaml --metadata=beameroption="show only notes" -o ${{matrix.file}}-notes.pdf ${{matrix.file}}.markdown
 
       - name: Upload .pdf
         uses: stefanzweifel/git-auto-commit-action@v5
