@@ -29,6 +29,7 @@ jobs:
 
   make-pdfs:
     needs: list_markdown
+    if: always()
     strategy:
       matrix:
         file: ${{ needs.list_markdown.outputs.files }}
