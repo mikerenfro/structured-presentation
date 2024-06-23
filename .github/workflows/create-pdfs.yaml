@@ -16,6 +16,9 @@ concurrency:
 
 jobs:
   make-docx:
+    strategy:
+      matrix:
+        file: ${{ steps.files_list.outputs.files }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -23,22 +26,22 @@ jobs:
       - name: create file list
         id: files_list
         run: |
-          echo "files=$(printf '"%s" ' [0-9]*.markdown)" > $GITHUB_OUTPUT
+          echo "files=$(printf '"%s" ' *.markdown)" > $GITHUB_OUTPUT
 
       - name: Build slides .pdf
         uses: docker://pandoc/latex:3.2
         with:
-          args: --defaults=settings.yaml -o foo-slides.pdf ${{ steps.files_list.outputs.files }}
+          args: --defaults=settings.yaml -o ${{matrix.file}}-slides.pdf ${{matrix.file}}
 
       - name: Build handouts .pdf
         uses: docker://pandoc/latex:3.2
         with:
-          args: --defaults=settings.yaml -V handout -o foo-handouts.pdf ${{ steps.files_list.outputs.files }}
+          args: --defaults=settings.yaml -V handout -o ${{matrix.file}}-handouts.pdf ${{matrix.file}}
 
       - name: Build notes .pdf
         uses: docker://pandoc/latex:3.2
         with:
-          args: --defaults=settings.yaml --metadata=beameroption="show only notes" -o foo-notes.pdf ${{ steps.files_list.outputs.files }}
+          args: --defaults=settings.yaml --metadata=beameroption="show only notes" -o ${{matrix.file}}-notes.pdf ${{matrix.file}}
 
       - name: Upload .pdf
         uses: stefanzweifel/git-auto-commit-action@v5
