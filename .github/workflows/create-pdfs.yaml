@@ -25,22 +25,15 @@ jobs:
         run: |
           echo "files=$(printf '"%s" ' *.markdown)" > $GITHUB_OUTPUT
     outputs:
-      files: ${{ steps.files_list.outputs.files }}
+      files_list: ${{ steps.files_list.outputs.files }}
   make-pdfs:
     needs: list-markdown
     if: ${{ always() }}
     strategy:
       matrix:
-        file: ${{ needs.list-markdown.outputs.files }}
+        file: ${{ needs.list-markdown.outputs.files_list }}
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: create file list
-        id: files_list
-        run: |
-          echo "files=$(printf '"%s" ' *.markdown)" > $GITHUB_OUTPUT
-
       - name: Build slides .pdf
         uses: docker://pandoc/latex:3.2
         with:
