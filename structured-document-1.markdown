@@ -1,3 +1,16 @@
+---
+author:
+- Firstname Lastname\inst{1}
+institute:
+  - \inst{1}Institute
+title: Sample Document Title
+subtitle: Sample Document Subtitle
+date: 2024-04-06
+theme: Malmoe
+section-titles: false
+toc: false
+---
+
 # Section 1
 
 ## Subsection 1a
