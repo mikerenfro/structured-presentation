@@ -23,7 +23,7 @@ jobs:
       - name: create file list
         id: files_list
         run: |
-          echo "files=$(echo *.markdown)" > $GITHUB_OUTPUT
+          echo "files=$(ls *.markdown | jq -R | jq -s .)" > $GITHUB_OUTPUT
     outputs:
       files_list: ${{ steps.files_list.outputs.files }}
   make-pdfs:
@@ -31,7 +31,7 @@ jobs:
     if: ${{ always() }}
     strategy:
       matrix:
-        file: ${{ needs.list-markdown.outputs.files_list }}
+        file: ${{ fromJSON(needs.list-markdown.outputs.files_list) }}
     runs-on: ubuntu-22.04
     steps:
       - name: Build slides .pdf
