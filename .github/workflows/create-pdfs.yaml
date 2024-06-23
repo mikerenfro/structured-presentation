@@ -31,6 +31,7 @@ jobs:
     needs: list-markdown
     if: ${{ always() }}
     strategy:
+      max-parallel: 1
       matrix:
         file: ${{ fromJSON(needs.list-markdown.outputs.files_list) }}
     runs-on: ubuntu-22.04
