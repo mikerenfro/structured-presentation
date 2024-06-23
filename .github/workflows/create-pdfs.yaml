@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  list_markdown:
+  list-markdown:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -27,11 +27,11 @@ jobs:
     outputs:
       files: ${{ steps.files_list.outputs.files }}
   make-pdfs:
-    needs: list_markdown
+    needs: list-markdown
     if: ${{ always() }}
     strategy:
       matrix:
-        file: ${{ needs.list_markdown.outputs.files }}
+        file: ${{ needs.list-markdown.outputs.files }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
