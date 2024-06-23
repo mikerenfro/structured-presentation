@@ -1,0 +1,7 @@
+from: markdown+yaml_metadata_block+header_attributes+implicit_header_references+multiline_tables
+to: beamer
+toc: true
+output-file: sample-presentation.pdf
+metadata-file: metadata.yaml
+slide-level: 3
+template: template.beamer

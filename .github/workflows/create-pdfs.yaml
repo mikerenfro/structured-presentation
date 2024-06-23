@@ -1,0 +1,46 @@
+name: 'Create .pdf file'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: read
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  make-docx:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: create file list
+        id: files_list
+        run: |
+          echo "files=$(printf '"%s" ' [0-9]*.md)" > $GITHUB_OUTPUT
+
+      - name: Build slides .pdf
+        uses: docker://pandoc/core:3.1
+        with:
+          args: --defaults=settings.yaml -o foo-slides.pdf ${{ steps.files_list.outputs.files }}
+
+      - name: Build handouts .pdf
+        uses: docker://pandoc/core:3.1
+        with:
+          args: --defaults=settings.yaml -V handout -o foo-handouts.pdf ${{ steps.files_list.outputs.files }}
+
+      - name: Build notes .pdf
+        uses: docker://pandoc/core:3.1
+        with:
+          args: --defaults=settings.yaml --metadata=beameroption="show only notes" -o foo-notes.pdf ${{ steps.files_list.outputs.files }}
+
+      - name: Upload .pdf
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Upload from GitHub Actions
