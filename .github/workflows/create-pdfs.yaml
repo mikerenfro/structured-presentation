@@ -26,6 +26,7 @@ jobs:
           echo "files=$(ls *.markdown | sed 's/.markdown//g' | jq -R | jq -s -c)" > $GITHUB_OUTPUT
     outputs:
       files_list: ${{ steps.files_list.outputs.files }}
+
   make-pdfs:
     needs: list-markdown
     if: ${{ always() }}
@@ -50,6 +51,9 @@ jobs:
         uses: docker://pandoc/latex:3.2
         with:
           args: --defaults=settings.yaml --metadata=beameroption="show only notes" -o ${{matrix.file}}-notes.pdf ${{matrix.file}}.markdown
+
+      - name: Checkout again
+        uses: actions/checkout@v4
 
       - name: Upload .pdf
         uses: stefanzweifel/git-auto-commit-action@v5
