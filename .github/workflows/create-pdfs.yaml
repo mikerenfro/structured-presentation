@@ -38,6 +38,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Build slides .pdf
         uses: docker://pandoc/latex:3.2
         with:
@@ -52,6 +53,8 @@ jobs:
         uses: docker://pandoc/latex:3.2
         with:
           args: --defaults=settings.yaml --metadata=beameroption="show only notes" -o ${{matrix.file}}-notes.pdf ${{matrix.file}}.markdown
+
+      - run: git pull
 
       - name: Upload .pdf
         uses: stefanzweifel/git-auto-commit-action@v5
