@@ -1,8 +1,9 @@
 SLIDES := $(patsubst %.markdown,%-slides-local.pdf,$(wildcard *.markdown))
 HANDOUTS := $(patsubst %.markdown,%-handouts-local.pdf,$(wildcard *.markdown))
 NOTES := $(patsubst %.markdown,%-notes-local.pdf,$(wildcard *.markdown))
-export PATH := /Library/TeX/texbin:$(PATH)
-PANDOC := /usr/local/bin/pandoc
+# export PATH := /Library/TeX/texbin:$(PATH)
+# PANDOC := /usr/local/bin/pandoc
+PANDOC := pandoc
 
 COMMON_OPTS := --defaults=settings.yaml
 SLIDES_OPTS := $(COMMON_OPTS)
