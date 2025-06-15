@@ -40,17 +40,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build slides .pdf
-        uses: docker://pandoc/latex:3.2
+        uses: docker://pandoc/latex:3.7
         with:
           args: --defaults=settings.yaml -o ${{matrix.file}}-slides.pdf ${{matrix.file}}.markdown
 
       - name: Build handouts .pdf
-        uses: docker://pandoc/latex:3.2
+        uses: docker://pandoc/latex:3.7
         with:
           args: --defaults=settings.yaml -V handout -o ${{matrix.file}}-handouts.pdf ${{matrix.file}}.markdown
 
       - name: Build notes .pdf
-        uses: docker://pandoc/latex:3.2
+        uses: docker://pandoc/latex:3.7
         with:
           args: --defaults=settings.yaml --metadata=beameroption="show only notes" -o ${{matrix.file}}-notes.pdf ${{matrix.file}}.markdown
 
